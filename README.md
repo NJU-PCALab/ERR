@@ -36,7 +36,6 @@ conda activate ERR
 
 # install python dependency
 pip install -r requirement.txt
-python setup.py develop
 ```
 
 
