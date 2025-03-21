@@ -4,7 +4,7 @@
 
 <sup>1</sup>Nanjing University · <sup>2</sup>Dalian University of Technology · <sup>3</sup>Tencent Youtu · <sup>4</sup>China Mobile
 
-[![CVPR](https://img.shields.io/badge/CVPR-Paper-<COLOR>.svg)](https://openaccess.thecvf.com/content/CVPR2024/papers/Zhao_Wavelet-based_Fourier_Information_Interaction_with_Frequency_Diffusion_Adjustment_for_Underwater_CVPR_2024_paper.pdf)
+[![arxiv](https://img.shields.io/badge/CVPR-Paper-<COLOR>.svg)](https://arxiv.org/abs/2503.13165)
 
 ### We are the first to propose a <span style="color:red;">Hybrid Architecture</span> for low level vison, ERR, which integrates state-of-the-art operators, including <span style="color:blue;">Transformers</span>, <span style="color:green;">Mamba</span>, and <span style="color:purple;">KAN</span>.
 
