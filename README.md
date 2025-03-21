@@ -40,7 +40,7 @@ pip install -r requirement.txt
 
 
 ## 🔗 Datasets
-We provide the divided dataset for UIEB and LSUI.
+You can get the training and test datasets from the following links:
    
 | UHD-LL | [UHD-LL](  https://drive.google.com/drive/folders/1IneTwBsSiSSVXGoXQ9_hE1cO2d4Fd4DN  ) | 
 
