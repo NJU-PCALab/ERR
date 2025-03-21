@@ -1,0 +1,158 @@
+# general settings
+name: ERR_UHDLL
+# name: debug_FeMaSR
+model_type: FeMaSRModel 
+scale: &upscale 1
+num_gpu: 1 # set num_gpu: 0 for cpu mode
+manual_seed: 0
+
+# dataset and data loader settings
+datasets:
+  train:
+    name: UHDLL
+    type: PairedImageDataset
+
+    dataroot_gt: /home/test/Workspace/zc/dataset_IR/UHD/UHD-LL/training_set/gt
+    dataroot_lq: /home/test/Workspace/zc/dataset_IR/UHD/UHD-LL/training_set/input
+
+    io_backend:
+      type: disk
+    
+    gt_size: 768
+    use_resize_crop: False
+    use_flip: False
+    use_rot: False
+
+    # data loader
+    use_shuffle: true
+    geometric_augs: True
+    batch_size_per_gpu: &bsz 6 
+    num_worker_per_gpu: *bsz
+    dataset_enlarge_ratio: 1
+
+    prefetch_mode: cpu
+    num_prefetch_queue: *bsz
+
+  val:
+    name: UHDLL
+    type: PairedImageDataset
+    
+    dataroot_gt: /home/test/Workspace/zc/dataset_IR/UHD/UHD-LL/testing_set/gt
+    dataroot_lq: /home/test/Workspace/zc/dataset_IR/UHD/UHD-LL/testing_set/input
+
+    gt_size: 768
+    io_backend:
+      type: disk
+    geometric_augs: True
+    use_resize_crop: False
+    use_flip: False
+    use_rot: False
+
+
+network_g:
+  type: ERR
+  channel_query_dict: 
+    8: 256
+    16: 256
+    32: 384
+    64: 192
+    128: 96
+    256: 16
+    512: 32
+  unit_num: 3
+  number_block: 1
+  num_heads: 8
+  match_factor: 4
+  ffn_expansion_factor: 2
+  scale_factor: 8
+  bias: True
+  LayerNorm_type: 'WithBias'
+  attention_matching: True
+  ffn_matching: True
+  ffn_restormer: False
+
+
+path:
+  pretrain_network_hq: ~
+  pretrain_network_g: ~ 
+  pretrain_network_d: ~
+  strict_load: false
+  resume_state: ~
+
+
+
+train:
+  optim_g:
+    type: AdamW
+    lr: !!float 1e-4 
+    weight_decay: !!float 1e-3
+    betas: [0.9, 0.99]
+
+  scheduler:
+    type: CosineAnnealingRestartCyclicLR 
+    periods: [50000]
+    restart_weights: [1]
+    eta_mins: [0.0001, 0.0000001]
+
+  total_iter: 51000
+  warmup_iter: -1  # no warm up
+
+  pixel_opt:
+    type: L1Loss
+    loss_weight: 2.0 
+    reduction: mean
+
+  pixel_ssim_opt:
+    loss_weight: !!float 1.0
+
+  global_opt:
+    type: DCT_global_loss
+    loss_weight: !!float 0.5
+
+  lowf_opt:
+    type: DCT_lowf_loss
+    loss_weight: !!float 1.0
+
+  highf_opt:
+    type: DCT_highf_loss
+    loss_weight: !!float 0.5
+
+  net_d_iters: 0
+  net_d_init_iters: !!float 0 
+
+val:
+  val_freq: !!float 333 
+  save_img: true
+  only_save_best: true
+  save_all_outputs: false
+
+  key_metric: psnr
+  metrics:
+    psnr: 
+      type: psnr 
+      crop_border: 4
+      test_y_channel: true
+    ssim:
+      type: ssim 
+      crop_border: 4
+      test_y_channel: true
+    lpips:
+      type: lpips 
+      better: lower
+
+# logging settings
+logger:
+  print_freq: 111
+  save_checkpoint_freq: !!float 16000
+  save_latest_freq: !!float 16000
+  show_tf_imgs_freq: !!float 10000000
+  use_tb_logger: true
+
+# wandb:
+#     project: ESRGAN
+#     resume_id: ~
+
+dist_params:
+  backend: nccl
+  port: 16500 #29500
+find_unused_parameters: true
