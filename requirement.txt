@@ -1,0 +1,8 @@
+lmdb
+tqdm
+einops
+numpy==1.26
+pyiqa==0.1.12
+mamba-ssm==1.0.1
+causal-conv1d==1.1.1
+triton==3.2
