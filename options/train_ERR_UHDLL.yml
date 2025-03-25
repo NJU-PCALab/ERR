@@ -90,11 +90,11 @@ train:
 
   scheduler:
     type: CosineAnnealingRestartCyclicLR 
-    periods: [50000]
+    periods: [500000]
     restart_weights: [1]
     eta_mins: [0.0001, 0.0000001]
 
-  total_iter: 51000
+  total_iter: 500000
   warmup_iter: -1  # no warm up
 
   pixel_opt:
